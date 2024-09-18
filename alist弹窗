@@ -1,0 +1,154 @@
+<script src="https://cdn.ioszn.com/js/sweetalert.min.js"></script>
+<style>
+/* Center align buttons in SweetAlert dialog */
+.swal-footer {
+text-align: center;
+}
+
+/* Add your custom button styles here */
+.custom-swal-button {
+font-size: 14px;
+padding: 10px 20px;
+border-radius: 5px;
+}
+
+/* Style for the "确认密码" button */
+.swal-button--confirm {
+background-color: green; /* Change to your desired color */
+color: white; /* Text color */
+}
+
+/* Style for the "复制小程序" button */
+.swal-button--copy {
+background-color: orange; /* Change to your desired color */
+color: white; /* Text color */
+}
+
+/* Style for the "添加QQ" button */
+.swal-button--joinQQ {
+background-color: red; /* Change to your desired color */
+color: white; /* Text color */
+}
+
+
+
+/* Prevent double-tap zooming */
+body {
+touch-action: manipulation;
+}
+
+/* Disable scrolling */
+.no-scroll {
+overflow: hidden;
+}
+</style>
+<script>
+let password = "0000";
+
+if (localStorage.getItem('pan_password') == password) {
+// 用户已输入正确密码，直接进入站点
+} else {
+// 用户还没有输入密码，弹出输入密码的提示框
+checkPassword("success", "输入密码进入");
+}
+
+function checkPassword(ic, ti) {
+// Add no-scroll class to body to prevent scrolling
+document.body.classList.add("no-scroll");
+
+swal({
+title: "公告",
+text: "\n关注茗阁回复密码 获取访问密码\n仅供本人学习研究及收藏存档\n如有侵犯权益，敬请联系删除\n点击下方添加QQ：通过链接添加",
+html: 'true',
+closeOnConfirm: false,
+closeOnClickOutside: false,
+icon: ic,
+buttons: {
+confirm: {
+text: "确认访问",
+value: "confirm",
+className: "custom-swal-button swal-button--confirm"
+},
+copy: {
+text: "复制微信号",
+value: "copy_mini_program",
+className: "custom-swal-button swal-button--copy"
+},
+joinQQ: {
+text: "添加QQ",
+value: "join_qq_group",
+className: "custom-swal-button swal-button--joinQQ"
+},
+viewAnnouncement: {
+text: "获取密码",
+value: "view_announcement",
+className: "custom-swal-button swal-button--copy"
+},
+},
+content: {
+element: "input",
+attributes: {
+placeholder: "请输入访问密码",
+type: "password",
+},
+},
+}).then((value) => {
+// Remove no-scroll class to allow scrolling again
+document.body.classList.remove("no-scroll");
+
+if (value === '') {
+checkPassword("warning", "请输入正确的密码");
+} else if (value === password) {
+swal("欢迎访问茗阁网盘", {
+button: false,
+});
+localStorage.setItem("pan_password", value);
+} else if (value === "view_announcement") {
+// 弹出显示公告内容的提示框
+showAnnouncement();
+} else {
+checkPassword("warning", "密码错误");
+}
+
+// 处理自定义按钮的点击事件
+if (value === "copy_mini_program") {
+const textToCopy = "w7779966w";
+const tempElement = document.createElement("textarea");
+tempElement.value = textToCopy;
+document.body.appendChild(tempElement);
+tempElement.select();
+document.execCommand("copy");
+document.body.removeChild(tempElement);
+swal("复制成功！", "请前微信搜索添加。").then(() => {
+checkPassword("success", "输入密码进入");
+});
+} else if (value === "join_qq_group") {
+window.location.href = "https://d.4rxb.com/s/5qi0sq";
+}
+});
+}
+
+// 弹出显示公告内容的提示框
+function showAnnouncement() {
+swal({
+title: '茗阁网盘',
+text: "扫码下面二维码或关注茗阁公众号获取最新密码",
+buttons: {
+cancel: {
+text: "关闭",
+value: false,
+visible: true,
+},
+},
+icon: "info",
+content: {
+element: "img",
+attributes: {
+src: "https://alist.wxs888.cn/%E9%98%BF%E9%87%8C/%E4%B8%AA%E4%BA%BA%E7%9B%98/%E5%BE%AE%E4%BF%A1%E5%9B%BE%E7%89%87_20240918150940.jpg", // 这里用占位图代替实际图片
+},
+},
+}).then((value) => {
+checkPassword("success", "输入密码进入");
+});
+}
+</script>
